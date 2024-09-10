@@ -24,6 +24,8 @@ class Game {
 
     joinCount = 0;
 
+    intro = true;
+
     // Rooms that have a numbered door.
     doorRooms = [9, 19, 20, 22, 28, 31, 33, 37, 41, 43, 45, 47];
 
@@ -272,7 +274,30 @@ class Game {
         this.newRoom();
 
         // Intro text.
-        this.inputEnabled = true;
+        this.intro = true;
+        this.inputEnabled = false;
+        this.ego.say("Hello!!", () => {
+            this.ego.say("My name is Pip.", () => {
+                this.ego.say("I suffer from Triskaidekaphobia, the fear of the number 13.", () => {
+                    this.ego.moveTo(300, 740, () => {
+                        this.ego.say("This is an Exposure Therapy escape room.", () => {
+                            this.ego.moveTo(300, 800, () => {
+                                this.ego.say("My therapist believes that it could cure me.", () => {
+                                    this.ego.say("Please help me to escape...", () => {
+                                        this.ego.say("...and hopefully be cured in the process.", () => {
+                                            this.intro = false;
+                                            this.inputEnabled = true;
+                                            this.roomTime = this.lastTime;
+                                            this.fadeOut(this.status);
+                                        }, 200);
+                                    });
+                                });
+                            });
+                        });
+                    });
+                }, 400);
+            });
+        });
 
         // Fade in the whole screen at the start.
         this.fadeIn(this.wrap);
@@ -353,7 +378,9 @@ class Game {
         });
 
         // Update the ghosts, if there are any.
-        this.updateGhosts();
+        if (!this.intro) {
+            this.updateGhosts();
+        }
 
         // Update sentence.
         let newSentence = this.command + ' ' + this.thing;
@@ -411,10 +438,10 @@ class Game {
             let secsInRoom = ((this.lastTime - this.roomTime) / 1000);
             let doorRoom = this.doorRooms.includes(this.room);
             let safeRoom = [7, 8, 14, 21, 42].includes(this.room) && !doorRoom;
-            let maxGhosts = (doorRoom? 13 : 4);
+            let maxGhosts = (doorRoom? 12 : 4);
             let ghostCount = this.ghosts.length;
             let ghostsToAdd = (doorRoom? ((ghostCount < maxGhosts) && (ghostCount < (secsInRoom-1))? 1 : 0) : (4 - ghostCount));
-            let bones = document.querySelector('._13_ghosts');
+            let bones = document.querySelector('._13th_ghost');
 
             // Add another ghost each second until we reach the max.
             if (!safeRoom && (ghostCount < maxGhosts) && (ghostCount < (secsInRoom - (doorRoom? 1 : 0)))) {
@@ -428,11 +455,11 @@ class Game {
                             ghost.moveTo(480, 185, () => {
                                 ghost.setPosition(455, 185);
                                 this.joinCount++;
-                                if (this.joinCount == 13) {
-                                    bones = this.addPropToRoom([ 0, 0x0C, '_13_ghosts', '☠️', 62, 104, 449, 210, 1000 ]);
+                                if (this.joinCount == 12) {
+                                    bones = this.addPropToRoom([ 0, 0x0C, '_13th_ghost', '☠️', 62, 104, 449, 210, 1000 ]);
                                     bones.maxStep = 2;
                                     this.ghosts.forEach(g => g.hide());
-                                    this.ego.say("Ah! The 13 ghosts!");
+                                    this.ego.say("Ah! The 13th ghost!");
                                     this.ego.shake();
                                 }
                             });
