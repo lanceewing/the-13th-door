@@ -1,0 +1,16 @@
+{
+    "compress": {
+        "booleans_as_integers": true,
+        "ecma": 6,
+        "unused": false,
+        "unsafe": true,
+        "unsafe_math": true,
+        "drop_console": true
+    },
+    "mangle": {
+        "properties": {
+            "reserved": ["⏳"]
+        }
+    },
+    "toplevel": true
+}

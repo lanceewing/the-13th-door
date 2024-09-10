@@ -1,0 +1,555 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  user-select: none;
+}
+body {
+  background: #000;
+  color: #B2CDDE;
+  font-size: 24px;
+  font-family: courier new;
+  overflow: hidden;
+  padding: 0px;
+  margin: 0px;
+  height: 100vh;
+  position: relative;
+}
+#msg {
+  font-size: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #019F35;
+}
+span {
+  display: inline-block;
+}
+#overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 2000;
+  display: none;
+}
+#status {
+  background-color: #fff;
+	color: #000;
+	font-weight: bold;
+  height: 27px;
+  text-align: center;
+  line-height: 28px;
+}
+#sentence {
+  text-align: center;
+  line-height: 33px;
+  color: white;
+  background-color: black;
+}
+#controls {
+  background-color: black;
+  height: 82px;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji";
+}
+#controls span:hover, #itemlist div:hover {
+  color: hsl(210, 100%, 40%);
+  text-shadow: hsla(210,100%,20%,.3) 0 -1px 0, hsl(210,100%,85%) 0 2px 1px, hsla(200,100%,80%,1) 0 0 5px, hsla(210,100%,50%,.6) 0 0 20px;
+}
+#controls div {
+  float: left;
+}
+.arrows {
+  width: 42px;
+}
+.arrows span {
+  font-size: 40px;
+  height: 80px;
+  width: 40px;
+  line-height: 75px;
+  text-align: center;
+  background-color: #2d2022;
+  margin: 1px;
+  cursor: var(--➕);
+}
+#items {
+  width: 463px;
+  height: 82px;
+  background-color: #2d2022;;
+  margin: 1px;
+  overflow: hidden;
+  position: relative;
+}
+#itemlist {
+  position: absolute;
+  left: 0px;
+  width: 2000px;
+  transition: left 100ms ease-in-out;
+}
+#itemlist span {
+  width: 75px;
+  margin: 1px;
+  height: 100%;
+  text-align: center;
+  line-height: 75px;
+  font-size: 40px;
+}
+#commands {
+  width: 410px;
+  font-size: 0px;
+}
+#commands span {
+  background-color: #2d2022;
+  width: 80px;
+  margin: 1px;
+  height: 80px;
+  text-align: center;
+  line-height: 75px;
+  font-size: 40px;
+}
+#wrap {
+  top: 50vh;
+  left: 50vw;
+  width: 960px;
+  height: 627px;
+  position: absolute;
+  overflow: hidden;
+  transform: scale3d(var(--scale-x), var(--scale-y), 1)  translate(-50%, -50%);
+  transform-origin: 0 0;
+  opacity: 0;
+}
+#screen {
+  position: relative;
+  height: 485px;
+  z-index: -2;
+  width: 960px;
+  perspective: 500px;
+  perspective-origin: top;
+  background-size: 960px 286px;
+  background-repeat: no-repeat;
+  background-color: #7B4C3A;
+}
+#screen * {
+  position: absolute;
+}
+x-ego {
+  transform: rotateY(0deg) translate(var(--sprite-left), var(--sprite-top)) translateZ(0);
+  will-change: transform;
+  transition: all 50ms linear;
+}
+.shake :not(.feet) {
+  animation: shake 0.2s infinite;
+  transform: translate(0, 0);
+}
+@keyframes shake {
+  50% {
+    transform: translate(-1px, 0);
+  }
+}
+x-shadow {
+  --shadow-width: var(--sprite-width);
+  --shadow-height: calc(var(--sprite-width)/2/3);
+  position: absolute;
+  bottom: calc(var(--shadow-height)/-2);
+  left: 0px;
+  width: var(--shadow-width);
+  height: var(--shadow-height);
+  background: #000;
+  border-radius: 40%;
+  opacity: 0.5;
+  filter: blur(1.2px);
+  z-index: 0;
+  transform: rotateY(0deg);
+}
+x-sprite canvas {
+  width: 100%;
+  height: 100%;
+  transform: rotateY(0deg); 
+  filter: drop-shadow(0px 2px 6px black);
+}
+.actor {
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+}
+.head {
+  border-radius: 50%;
+  background: linear-gradient(grey 16px, black 16px 19px, white 19px);
+  width: 42px;
+  height: 42px;
+  top: 7px;
+  left: 4px;
+  border: solid 3px black;
+}
+.head:after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: grey;
+  border-radius: 50%;
+  border: solid 3px black;
+  top: -9px;
+  left: 12px;
+  z-index: -1;
+}
+x-ego .head:after {
+  display: none;
+}
+.body {
+  position: relative;
+  border-bottom: 86px solid black;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  height: 0;
+  width: 50px;
+  top: 47px;
+}
+.body:after {
+  content: "";
+  position: absolute;
+  width: 42px;
+  border-bottom: 81px solid grey;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  height: 0;
+  top: 3px;
+  left: -11px;
+}
+.facing1 .body {
+  width: 35px;
+  border-right-width: 0px;
+}
+.facing1 .body:after {
+  width: 27.5px;
+  border-right-width: 0px;
+}
+.facing2 .body {
+  width: 35px;
+  left: 15px;
+  border-left-width: 0px;
+}
+.facing2 .body:after {
+  width: 27.5px;
+  left: 3.5px;
+  border-left-width: 0px;
+}
+.feet {
+  top: 114px;
+  height: 20px;
+  z-index: -1;
+}
+.feet:before {
+  content: "";
+  position: absolute;
+  width: 3.5px;
+  height: 20px;
+  background-color: black;
+  bottom: -5px;
+  left: 15px;
+  animation: feet 0.3s ease-out infinite alternate-reverse;
+  animation-play-state: paused;
+}
+.feet:after {
+  content: "";
+  position: absolute;
+  width: 3.5px;
+  height: 20px;
+  background-color: black;
+  bottom: -5px;
+  left: 31.5px;
+  animation: feet 0.3s ease-out infinite alternate;
+  animation-play-state: paused;
+}
+.walking .feet:before, .walking .feet:after {
+  animation-play-state: running;
+}
+@keyframes feet {
+  0% {
+    bottom: -5px;
+  }
+  90% {
+    bottom: -15px;
+  }
+  100% {
+    bottom: -15px;
+  }
+}
+.pack {
+  width: 40px;
+  height: 44px;
+  background-color: red;
+  top: 51px;
+  left: 5px;
+  border: solid 3px black;
+  z-index: -1;
+}
+.facing2 .pack {
+  width: 20px;
+} 
+.facing1 .pack {
+  width: 20px;
+  left: 25px;
+}
+.facing3 .pack {
+  z-index: 0;
+}
+.bubble {
+  font-size: smaller;
+  font-family: "Comic Sans MS", "Roboto", sans-serif;
+  font-weight: bold;
+  padding: 15px;
+  color: black;
+  background: white;
+  border-radius: 20px;
+  border: 2px solid black;
+  box-shadow: 6px 3px black;
+  z-index: 1010;
+  transform: rotateY(0deg);
+}
+.bubble:before {
+  content: "";
+  position: absolute;
+  width: 15px;
+  display: block;
+  bottom: -9px;
+  left: var(--left);
+  height: 15px;
+  transform: rotate(45deg);
+  background-color: white;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  box-shadow: 5px 1px black;
+  z-index: 1011;
+}
+.floor {
+  background-color:white;
+  background-image: 
+    linear-gradient(90deg, var(--fc) 50%, transparent 50%),
+    linear-gradient(var(--fc) 50%, transparent 50%);
+  background-size:50px 50px;
+  transform: rotateX(77deg);
+}
+.back_wall {
+  background-image: 
+    linear-gradient(335deg, rgba(80, 80, 80, 0.2) 23px, transparent 23px),
+    linear-gradient(155deg, rgba(88, 88, 88, 0.3) 23px, transparent 23px),
+    linear-gradient(335deg, rgba(80, 80, 80, 0.2) 23px, transparent 23px),
+    linear-gradient(155deg, rgba(88, 88, 88, 0.3) 23px, transparent 23px);
+  background-size: 58px 58px;	
+  background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
+}
+.left_wall, .right_wall, .left_corner, .right_corner {
+  top: 0px;
+  background-color: rgba(255, 228, 196, 1.0);
+  background-image: 
+    linear-gradient(335deg, rgba(80, 80, 80, 0.2) 23px, transparent 23px),
+    linear-gradient(155deg, rgba(88, 88, 88, 0.3) 23px, transparent 23px),
+    linear-gradient(335deg, rgba(80, 80, 80, 0.2) 23px, transparent 23px),
+    linear-gradient(155deg, rgba(88, 88, 88, 0.3) 23px, transparent 23px);
+  background-size: 58px 58px;	
+  background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
+  filter: brightness(0.95);
+}
+.left_wall {
+  left: -30px;
+  transform: rotateY(100deg);
+}
+.right_wall {
+  right: -30px;
+  transform: rotateY(80deg);
+}
+.left_wall.p1, .right_wall.p1 {
+  clip-path: polygon(
+    -30px 0, 
+    -30px 400px, 
+    80px 400px, 
+    80px 110px, 
+    170px 110px, 
+    170px 0, 
+    -30px 0);
+  z-index: 795 !important;
+}
+.left_corner {
+  transform: rotateY(100deg);
+}
+.right_corner {
+  transform: rotateY(80deg);
+}
+.left_exit {
+  top: 14px;
+  background: #101010;
+  left: 0px;
+}
+.right_exit {
+  top: 14px;
+  background: #101010;
+  right: 0px;
+}
+.door {
+  background-image: linear-gradient(#000 75%, #222);
+  border-top-left-radius: 90px;
+  border-top-right-radius: 90px;
+  height: 158px;
+  width: 100px;
+  z-index: 15;
+  top: 97px;
+  box-shadow: #1f1f1f 0px 0px 3px 4px;
+  perspective: 350px;
+  overflow: hidden;
+  border: #EFEFEF40 1px solid;
+}
+.door:after {
+  content: "";
+  position: absolute;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+  transform-origin: right center;
+  width: 100%;
+  height: 100%;
+  z-index: 16;
+  border-top-left-radius: 90px;
+  border-top-right-radius: 90px;
+  background-size: 21px 50px;
+  background-color: var(--dc);
+  box-shadow: inset #001306 0px 0px 3px 4px;
+  background-image: linear-gradient(90deg, transparent 97%, #EFEFEF 97%);
+  filter: brightness(0.8);
+}
+.door.p5:after {
+  transform: rotateY(-60deg);
+}
+.door.p5.dh:after {
+  border-top: transparent solid 115px;
+  border-bottom: transparent solid 85px;
+  border-right: transparent solid 70px;
+  box-shadow: inset grey 0px 0px 3px 3px;
+}
+.front_wall {
+  background: black;
+  bottom: 0;
+}
+.front_wall.p1 {
+  clip-path: polygon(0 0, 0 16px, 960px 16px, 960px 0, 540px 0, 542px 15px, 418px 15px, 420px 0, 0 0);
+}
+.south_exit {
+  transform: rotateX(77deg);
+}
+.sign {
+  background-color: white;
+}
+.card_slot, .coin_slot {
+  background-color: black;
+  border: grey 5px solid;
+}
+.latch {
+  background-color: grey;
+}
+.l1 {
+  transform: rotate(90deg);
+}
+.platform {
+  background-color: silver;
+  transform: rotateX(77deg);
+  border-style: inset;
+}
+.room37 .door_handle {
+  display: none;
+}
+.door_handle {
+  background-color: grey;
+  transform: rotate(15deg);
+  border-radius: 50%;
+}
+.faint_marks {
+  opacity:0.05;
+  transition: all 2s;
+}
+.fm {
+  filter:invert();
+  opacity:01.0;
+}
+.coin {
+  background: gold;
+  border-radius: 50%
+}
+.hook {
+  background-color: grey;
+}
+.bolt {
+  background-color: grey;
+  border-radius: 50%
+}
+.gear {
+  display: none;
+}
+.gear.g1 {
+  display: block;
+}
+.gear_box {
+  background-color: #333;
+  border-style: outset;
+  border-color: #999;
+  border-radius: 20%;
+  border-width: 2px;
+  box-shadow: inset #222 0px 0px 40px 2px;
+  font-size:50px;
+  text-align: center;
+  line-height: 88px;
+}
+.gear_box:after {
+  content:"⚙️";
+  color: transparent;  
+  text-shadow: 0 0 0 #222;
+}
+span[data-name='door handle'] {
+  position:relative;
+  color:transparent;
+}
+span[data-name='door handle']:hover {
+  text-shadow: none !important;
+}
+span[data-name='door handle']:after {
+  content: "";
+  display: inline-block;
+  width: 30px;
+  height: 8px;
+  background-color: grey;
+  transform: rotate(15deg);
+  border-radius: 50%;
+  position: absolute;
+  top: 39px;
+  left: 24px;
+}
+.ghost {
+  opacity: 0.1;
+}
+.ghost.gsh {
+  animation: shake 0.2s infinite;
+  transform: translate(0, 0);
+}
+._13_ghosts {
+  opacity: 0.7;
+  filter: blur(0.2px) drop-shadow(2px 4px 6px black)
+}
+.explode {
+  transition: box-shadow 0.1s;
+  box-shadow: 0 0px 30px 30px rgba(255,0,0,0.6), inset 0 0px 15px 15px rgba(255,0,0,0.6);
+}
+
+#wrap:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+      to bottom,
+      rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 2;
+  pointer-events: none;
+}
+
