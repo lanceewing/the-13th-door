@@ -1,31 +1,75 @@
 class Sound {
   
+  sounds = {};
+
   /**
    * Constructor for Sound.
    */
   constructor() {
-    setTimeout(() => {
-      let audio = new Audio();
-      let player = new CPlayer();
-      player.init(Sound.SONG);
-      // Using only 4 instruments. This saves a bit of space.
-      player.generate();
-      player.generate();
-      player.generate();
-      audio.src = URL.createObjectURL(new Blob([player.createWave()], {type: "audio/wav"}));
-      // This is background music, so we set it to loop and turn the volume down a bit.
-      audio.loop = true;
-      audio.volume = 1.0;
-      audio.playbackRate = 0.8;
-      this.song = audio;
-    }, 1);
+    this.add('music', 1, Sound.SONG);
+
+    this.add('hit', 1, [3,,0.1283,0.6002,0.4009,0.06,,,,,,,,,,,-0.0393,-0.2507,1,,,,,0.5]);
+    this.add('pickup', 2, [2,0.0109,0.2089,0.2983,0.3261,0.2563,,-0.0176,0.4618,0.0029,-0.6415,-0.2028,0.3867,0.9195,0.6075,0.3908,0.1457,-0.0004,0.967,,0.2442,,-0.5556,0.29]);
+    this.add('end',  5, [2,0.0738,0.9417,0.1338,0.1844,0.504,,-0.0519,0.1093,0.1416,0.696,0.4653,0.0134,0.2708,-0.2926,-0.1538,,-0.0891,0.997,0.0084,0.7638,0.0076,0.6493,0.5]);
+    this.add('push', 1, [3,0.25,0.1706,,0.45,0.85,,0.04,0.36,,,-0.02,,,,,0.28,,1,,,0.1,,0.23]);
+    this.add('door', 2, [3,0.295,0.49,0.7,0.43,0.73,0.32,0.24,-0.62,0.46,0.104,-0.54,,0.19,-0.4712,0.21,-0.3,-0.18,0.36,-0.6,0.08,0.57,0.28,0.5]);
   }
-  
+
+  /**
+   * Generates a sound using the given data and adds it to the stored sounds under the 
+   * given name. It will generate the sound multiple times if count is greater than one.
+   * This method handles both jsfxr sounds and SoundBox compositions.
+   * 
+   * @param {Object} name The name of the sound to create. This is the key in the stored sounds.
+   * @param {Object} count The number of times to generate the sound.
+   * @param {Object} data The data containing the parameters of the sound to be generated.
+   */
+  add(name, count, data) {
+    this.sounds[name] = {tick: 0, count: count, pool: []};
+    for (let i = 0; i < count; i++) {
+      let audio = new Audio();
+      if (data instanceof Array) {
+        // If it is an Array, it must be jsfxr data.
+        audio.src = jsfxr(data);
+        audio.volume = 1.0;
+      } else {
+        // Otherwise it is SoundBox data.
+        let player = new CPlayer();
+          player.init(Sound.SONG);
+          // Using only 4 instruments. This saves a bit of space.
+          player.generate();
+          player.generate();
+          player.generate();
+          audio.src = URL.createObjectURL(new Blob([player.createWave()], {type: "audio/wav"}));
+          // This is background music, so we set it to loop and turn the volume down a bit.
+          audio.loop = true;
+          audio.volume = 1.0;
+          audio.playbackRate = 0.8;
+      }
+      this.sounds[name].pool.push(audio);
+    }
+  }
+
+  /**
+   * Plays the sound of the given name. All sounds are stored as pre-generated Audio 
+   * objects. So it is simply a matter of telling it to play. Some sounds have multiple
+   * copies, particularly if the sound can be played in quick succession, potentially
+   * overlapping. In such a case, it can't use the same Audio, so iterates over a pool
+   * of Audios containing the same sound.  
+   * 
+   * @param {string} name The name of the sound to play.
+   */
+  play(name) {
+    let sound = this.sounds[name];
+    sound.pool[sound.tick].play();
+    sound.tick < sound.count - 1 ? sound.tick++ : sound.tick = 0;
+  }
+
   /**
    * Starts playing the game music.
    */
   playSong() {
-    this.song.play();
+    this.play('music');
   }
   
   /**

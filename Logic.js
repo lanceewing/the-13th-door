@@ -132,6 +132,7 @@ class Logic {
               doFn = () => {
                 obj.setPosition(obj.x + (obj.x < 480? 40 : -40), obj.z);
                 obj.propData[1] |= 0x40;
+                game.sound.play("push");
               };
             }
           }
@@ -423,6 +424,7 @@ class Logic {
               } else {
                 if (game.room == 43) {
                   door.classList.add("p5");
+                  game.sound.play("door");
                 } else {
                   ego.say("The key doesn't work with this door.");
                 }

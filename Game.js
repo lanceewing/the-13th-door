@@ -27,7 +27,7 @@ class Game {
     intro = true;
 
     // Rooms that have a numbered door.
-    doorRooms = [9, 19, 20, 22, 28, 31, 33, 37, 41, 43, 45, 47];
+    doorRooms = [8, 9, 19, 20, 22, 28, 31, 33, 37, 41, 43, 45, 47];
 
     // RGB values used for doors and floors.
     colours = [
@@ -73,7 +73,7 @@ class Game {
         // Room 0
         [ 0, 9,  'coin', null, 20, 10, 475,  770, null ],
 
-        // Room 3 (TODO: Put coin in balloon instead)
+        // Room 3
         [ 3, 9,  'coin', null, 20, 10, 475,  770, null ],
 
         // Room 4 - Coat room
@@ -259,8 +259,8 @@ class Game {
         this.room = 43;
 
         // Starting inventory.
-        this.getItem('triskaidekaphobia meter', '📟');
-        this.getItem('coin bag', '💰');
+        this.getItem('triskaidekaphobia meter', '📟', false);
+        this.getItem('coin bag', '💰', false);
 
         // Create Ego (the main character) and add it to the screen.
         this.ego = document.createElement('x-ego');
@@ -437,8 +437,8 @@ class Game {
         if (this.lastTime && this.urns.length) {
             let secsInRoom = ((this.lastTime - this.roomTime) / 1000);
             let doorRoom = this.doorRooms.includes(this.room);
-            let safeRoom = [7, 8, 14, 21, 42].includes(this.room) && !doorRoom;
-            let maxGhosts = (doorRoom? 12 : 4);
+            let safeRoom = [7, 14, 21, 42].includes(this.room) && !doorRoom;
+            let maxGhosts = (this.room == 8? 25 : (doorRoom? 12 : 4));
             let ghostCount = this.ghosts.length;
             let ghostsToAdd = (doorRoom? ((ghostCount < maxGhosts) && (ghostCount < (secsInRoom-1))? 1 : 0) : (4 - ghostCount));
             let bones = document.querySelector('._13th_ghost');
@@ -449,12 +449,18 @@ class Game {
                     let urn = this.urns[(ghostCount + i) % this.urns.length];
                     let ghost = this.addPropToRoom([ 0, 0x0C, 'ghost', '💀', 50, 80, urn.x, urn.z-1, urn.z+1 ]);
                     ghost.maxStep = 1 + (0.5 * Math.random());
+                    if (this.room == 8) {
+                        // End room.
+                        ghost.maxStep += 2;
+                    }
                     this.ghosts.push(ghost);
                     if (doorRoom) {
                         ghost.moveTo(urn.cx, urn.z-200, () => {
                             ghost.moveTo(480, 185, () => {
                                 ghost.setPosition(455, 185);
-                                this.joinCount++;
+                                if (this.room != 8) {
+                                    this.joinCount++;
+                                }
                                 if (this.joinCount == 12) {
                                     bones = this.addPropToRoom([ 0, 0x0C, '_13th_ghost', '☠️', 62, 104, 449, 210, 1000 ]);
                                     bones.maxStep = 2;
@@ -488,6 +494,7 @@ class Game {
                     this.tmeter -= 7.7;
                     this.doorRooms = this.doorRooms.filter(r => r != this.room);
                     this.ego.shake(() => this.ego.say("Aaahhh!!!"));
+                    this.sound.play("hit");
 
                     // If its the last door, add room with 13th door.
                     if (this.tmeter <= 7.7 && this.tmeter > 0) {
@@ -596,6 +603,32 @@ class Game {
         this.ego.show();
 
         this.fadeIn(this.wrap);
+
+        // End sequence.
+        if (this.room == 8) {
+            this.inputEnabled = false;
+            this.ego.moveTo(480, 800, () => {
+                this.sound.play("end");
+                this.ego.say("Hey! I'm completely cured!!!", () => {
+                    this.sound.play("end");
+                    this.ego.say("I am no longer afraid of the number 13!", () => {
+                        this.sound.play("end");
+                        this.ego.setDirection(Sprite.OUT);
+                        this.ego.say("Thank you so much for your help!", () => {
+                            this.sound.play("end");
+                            this.ego.say("Well done!!!", () => {
+                                setTimeout(() => {
+                                    this.fadeOut(this.wrap);
+                                    this.msg.innerHTML = "The End";
+                                    this.msg.style.display = 'flex';
+                                    this.fadeIn(this.msg);
+                                }, 10000);
+                            }, 200);
+                        });
+                    });
+                });
+            });
+        }
     }
 
     /**
@@ -702,7 +735,10 @@ class Game {
      * 
      * @param {string} name The name of the item to add to the inventory.
      */
-    getItem(name, icon) {
+    getItem(name, icon, sound=true) {
+        if (sound) {
+            this.sound.play("pickup");
+        }
         let obj = this.objs.find(i => i.dataset['name'] == name);
         if (obj) {
             obj.propData[0] = -1;
