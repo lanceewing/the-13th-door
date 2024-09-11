@@ -13,6 +13,9 @@ class Sound {
     this.add('end',  5, [2,0.0738,0.9417,0.1338,0.1844,0.504,,-0.0519,0.1093,0.1416,0.696,0.4653,0.0134,0.2708,-0.2926,-0.1538,,-0.0891,0.997,0.0084,0.7638,0.0076,0.6493,0.5]);
     this.add('push', 1, [3,0.25,0.1706,,0.45,0.85,,0.04,0.36,,,-0.02,,,,,0.28,,1,,,0.1,,0.23]);
     this.add('door', 2, [3,0.295,0.49,0.7,0.43,0.73,0.32,0.24,-0.62,0.46,0.104,-0.54,,0.19,-0.4712,0.21,-0.3,-0.18,0.36,-0.6,0.08,0.57,0.28,0.5]);
+  
+    // Trigger fetch of voices up front.
+    window.speechSynthesis.getVoices();
   }
 
   /**
@@ -70,6 +73,21 @@ class Sound {
    */
   playSong() {
     this.play('music');
+  }
+
+  /**
+   * Speaks the given words.
+   * 
+   * @param {*} words 
+   */
+  speak(words) {
+    let audio = new SpeechSynthesisUtterance(words);
+    let voices = window.speechSynthesis.getVoices();
+    audio.voice = voices.filter(function(voice) { return voice.name.includes('Zira'); })[0];  // David, Hazel, Zira
+    audio.pitch = 0.2;
+    audio.rate = 1;
+    audio.volume = 0.5;
+    window.speechSynthesis.speak(audio);
   }
   
   /**

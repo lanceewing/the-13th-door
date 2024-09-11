@@ -48,6 +48,7 @@ class Logic {
           case 'door':
             if ((game.room == 42) && (game.tmeter > 0)) {
               ego.classList.add('shake');
+              game.sound.speak("Are you joking?");
               ego.say("Door 13! No way I'm going in there.", () => {
                 ego.classList.remove('shake');
                 game.inputEnabled = true;
@@ -319,6 +320,7 @@ class Logic {
                   ego.say("It's already open.");
                 } else {
                   door.classList.add("p5");
+                  game.sound.play("door");
                 }
               } else {
                 ego.say("I don't know the code.");
@@ -331,6 +333,7 @@ class Logic {
                   ego.say("It's already open.");
                 } else {
                   door.classList.add("p5");
+                  game.sound.play("door");
                 }
               } else {
                 ego.say("Hmmm, that didn't work.");
@@ -345,6 +348,7 @@ class Logic {
               obj.hide();
               game.dropItem('painting', 265, 350);
               door.classList.add("p5");
+              game.sound.play("door");
               break;
 
             case 'hole,magnet':
@@ -412,6 +416,7 @@ class Logic {
                   });
                   game.getItem('bolts','🔩');
                   door.classList.add("p5");
+                  game.sound.play("door");
                 }
               } else {
                 ego.say("Hmmm, that didn't work.");
@@ -437,6 +442,7 @@ class Logic {
               } else {
                 if (game.room == 9) {
                   door.classList.add("p5");
+                  game.sound.play("door");
                 } else {
                   ego.say("The key doesn't work with this door.");
                 }
@@ -449,6 +455,7 @@ class Logic {
                 ego.say("It's already open.");
               } else {
                 door.classList.add("p5");
+                game.sound.play("door");
               }
               break;
 
@@ -458,6 +465,7 @@ class Logic {
               } else {
                 door.classList.add("p5");
                 obj.classList.add("l1");
+                game.sound.play("door");
               }
               break;
 
@@ -469,6 +477,7 @@ class Logic {
                   if (door.coins == 13) {
                     door.classList.add("p5");
                     game.inputEnabled = true;
+                    game.sound.play("door");
                   } else {
                     ego.say("Nothing happened. Perhaps it needs more coins.");
                   }
@@ -481,6 +490,7 @@ class Logic {
             case 'door,door handle':
               if (game.room == 37) {
                 door.classList.add("p5", "dh");
+                game.sound.play("door");
                 setTimeout(() => game.dropItem('door handle'), 500);
               } else {
                 ego.say("The handle won't attach to this door.");
