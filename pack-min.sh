@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
 # Start with some substitutions to avoid Terser breaking things.
-cat Logic.js Util.js Sprite.js Ego.js player-small.js jsfxr.js Sound.js Game.js | sed 's/this.keys/this.kys/g' | sed 's/[.]screen/.scrn/g' | sed 's/flags/flgs/g' | sed 's/process[(]/prcs(/g' | sed 's/update[(]/updt(/g' | sed 's/setPosition[(]/setPstn(/g' | sed 's/reset[(]/rstt(/g' | sed 's/this.canvas/this.cnvs/g' | sed 's/this.content/this.cntnt/g' | sed 's/hide[(]/_hide(/g' | sed 's/show[(]/shw(/g' | sed 's/this.direction/this.drctn/g' | sed 's/this.heading/this.hdng/g' | sed 's/left[(]/_left(/g' | sed 's/right[(]/_right(/g' | sed 's/init[(]/_init(/g' | sed 's/[.]init/._init/g' | sed 's/this.step/this.stp/g' | sed 's/stepFactor/stpFactor/g' | sed 's/move[(]/_move(/g' | sed 's/stop[(]/_stop(/g' | sed 's/start[(]/_start(/g' | sed 's/getItem[(]/getItm(/g' | sed 's/re_move/remove/g' > combined.js
+cat Logic.js Util.js Sprite.js Ego.js player-small.js Sound.js Game.js | sed 's/this.keys/this.kys/g' | sed 's/[.]screen/.scrn/g' | sed 's/flags/flgs/g' | sed 's/process[(]/prcs(/g' | sed 's/update[(]/updt(/g' | sed 's/setPosition[(]/setPstn(/g' | sed 's/reset[(]/rstt(/g' | sed 's/this.canvas/this.cnvs/g' | sed 's/this.content/this.cntnt/g' | sed 's/hide[(]/_hide(/g' | sed 's/show[(]/shw(/g' | sed 's/this.direction/this.drctn/g' | sed 's/this.heading/this.hdng/g' | sed 's/left[(]/_left(/g' | sed 's/right[(]/_right(/g' | sed 's/init[(]/_init(/g' | sed 's/[.]init/._init/g' | sed 's/this.step/this.stp/g' | sed 's/stepFactor/stpFactor/g' | sed 's/move[(]/_move(/g' | sed 's/stop[(]/_stop(/g' | sed 's/start[(]/_start(/g' | sed 's/getItem[(]/getItm(/g' | sed 's/re_move/remove/g' > combined.js
 echo ";onload=()=>new Game" >> combined.js
 
 # Perform standard minification of the JS and CSS.
@@ -16,6 +16,7 @@ cat min.css >> roadroller_input.js
 echo '</style>' >> roadroller_input.js
 cat min_mid.html >> roadroller_input.js
 echo '`);' >> roadroller_input.js
+cat jsfxr.js >> roadroller_input.js
 cat min.js >> roadroller_input.js
 
 # Use roadroller to compress the JS, CSS and most of the HTML.
