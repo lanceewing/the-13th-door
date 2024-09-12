@@ -48,7 +48,6 @@ class Logic {
           case 'door':
             if ((game.room == 42) && (game.tmeter > 0)) {
               ego.classList.add('shake');
-              game.sound.speak("Are you joking?");
               ego.say("Door 13! No way I'm going in there.", () => {
                 ego.classList.remove('shake');
                 game.inputEnabled = true;

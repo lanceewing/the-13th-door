@@ -493,7 +493,6 @@ class Game {
                     bones = null;
                     this.tmeter -= 7.7;
                     this.doorRooms = this.doorRooms.filter(r => r != this.room);
-                    this.sound.speak("Ouch!");
                     this.ego.shake(() => this.ego.say("Aaahhh!!!"));
                     this.sound.play("hit");
 
