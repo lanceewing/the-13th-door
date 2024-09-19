@@ -10,15 +10,15 @@ Control Pip by using the Walk to, Look at, Pick up, Use and Push icons at the bo
 
 It's a classic Point and Click adventure game interface.
 
-**Walk to:** Used for moving around rooms and moving to other rooms.
+[🚶] **Walk to:** Used for moving around rooms and moving to other rooms.
 
-**Look at:** Used for examining an inventory item or an object in the current room.
+[👁️] **Look at:** Used for examining an inventory item or an object in the current room.
 
-**Pick up:** Used for picking up items that you find.
+[🤚🏼] **Pick up:** Used for picking up items that you find.
 
-**Use:** Used for interacting with certain items within the room.
+[👆🏼] **Use:** Used for interacting with certain items within the room.
 
-**Push:** Used for pushing objects around within a room.
+[💪🏼] **Push:** Used for pushing objects around within a room.
 
 You can also use the items in your inventory by clicking on them and then clicking on the thing you want to use it on.
 
