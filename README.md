@@ -8,8 +8,6 @@ You control Pip, who has Triskaidekaphobia, the fear of the number 13. His docto
 # Controls
 Control Pip by using the Walk to, Look at, Pick up, Use and Push icons at the bottom of the screen.
 
-It's a classic Point and Click adventure game interface.
-
 [🚶] **Walk to:** Used for moving around rooms and moving to other rooms.
 
 [👁️] **Look at:** Used for examining an inventory item or an object in the current room.
